@@ -1,1 +1,1 @@
-["category1", "category2"]
+["Physics", "Awards_of_the_Optical_Society", "Spectroscopy", "CERN_experiments", "CERN", "Physics_stubs", "Academic_awards", "Science_and_technology_awards", "Physical_phenomena", "Scanning_probe_microscopy", "Gold", "Measuring_instruments", "Terahertz_technology"]
