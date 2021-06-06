@@ -1,9 +1,9 @@
 import json
 import random
 import requests
-from base64 import b64decode
+import base64
 
-port = 51788
+port = 52254
 
 cname = []
 cweight = []
@@ -49,10 +49,12 @@ def getrandcategory():
         index += 1
     return cname[index]
 
+#get a random element from a list
 def randFromList(list):
     ind = random.randint(0, len(list) - 1)
     return list[ind]
 
+#get a random wighted article from wikipedia
 def getrandarticle():
     category = getrandcategory()
     nextLink = f'https://en.wikipedia.org/wiki/Special:RandomInCategory/{category}'
@@ -72,6 +74,7 @@ def getrandarticle():
     link = f'https://en.wikipedia.org/wiki/{temp}'
     return error, link, title, cat, sum, cont
 
+#get a known article from wikipedia
 def getArticle(link): 
     try:
         categoryRes = requests.get(f'http://127.0.0.1:{port}/get/{link}')
@@ -99,5 +102,16 @@ def getArticle(link):
     for c in content[1:]:
         cont += c
         cont += '\n'
+
+    try:
+        imageRes = requests.post("https://word-cloud-leungd.wn.r.appspot.com/cloud", json = {"text": cont})
+        if contentRes.status_code != 200:
+            return True, '', '', '', ''
+    except:
+        return True, '', '', '', ''
+
+    text = imageRes.text.replace('{"image":"data:image/png;base64,', '').replace('"}', '')
+    with open(f'imageDump/{title}.png', 'wb') as f:
+        f.write(base64.b64decode((text)))
 
     return False, title, cat, sum, cont

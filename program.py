@@ -23,8 +23,11 @@ cat = []
 sum = ''
 cont = ''
 
-tempIndex = -1
-tempHistory = [] 
+
+queue = []
+
+historyArticle = []
+historyInd = -1
 
 historyFile = 'history.csv'
 hist=''
@@ -67,7 +70,7 @@ def getNewArticle():
     if error:
         update('Error', "The application couldn't connect to wikipedia.", "Please make sure that you are connected to the internet and try restarting the program.", "Please make sure that you are connected to the internet and try restarting the program.")
         return
-    addLink(link)
+    addHistory([link, title, cat, sum, cont])
     concatCategory=''
     for c in cat:
         concatCategory += c + ' - '
@@ -80,18 +83,18 @@ def getArticle(l):
     if error:
         update('Error', "The application couldn't connect to wikipedia.", "Please make sure that you are connected to the internet and try restarting the program.", "Please make sure that you are connected to the internet and try restarting the program.")
         return
-    addLink(l)
     concatCategory=''
+    addHistory([link, title, cat, sum, cont])
     for c in cat:
         concatCategory += c + ' - '
     update(title, concatCategory, sum, cont)
 
-def addLink(link):
-    global tempIndex
-    if len(tempHistory) > 19:
-        tempHistory.pop(0)
-    tempHistory.append(link)
-    tempIndex=len(tempHistory)-1
+def addHistory(content):
+    global historyArticle, historyInd
+    if len(historyArticle) > 19:
+        historyArticle.pop(0)
+    historyArticle.append(content)
+    historyInd=len(historyArticle)-1
 
 def update(title, cat, sum, cont):
     main.setTitle(title)
@@ -106,31 +109,35 @@ def update(title, cat, sum, cont):
     learn.setContent(cont)
     help.setContent(sum)
 
+    try:
+        main.setImage(f'imageDump/{title}.png')
+    except:
+        main.setImage(f'imageDump/wordCloud.png')
+
+def splitList(l):
+    return l[0], l[1], l[2], l[3], l[4]
+
 def next():
-    global tempIndex
-    global tempHistory
-    if tempIndex == len(tempHistory) - 1:
+    global historyInd
+    global historyArticle
+    global link, title, cat, sum, cont
+    if historyInd == len(historyArticle) - 1:
         getNewArticle()
     else:
-        tempIndex += 1
-        error, title, cat, sum, cont = chooser.getArticle(tempHistory[tempIndex])
-        if error:
-            update('Error', "The application couldn't connect to wikipedia.", "Please make sure that you are connected to the internet and try restarting the program.", "Please make sure that you are connected to the internet and try restarting the program.")
-            return
+        historyInd += 1
+        link, title, cat, sum, cont = splitList(historyArticle[historyInd])
         concatCategory=''
         for c in cat:
             concatCategory += c + ' - '
         update(title, concatCategory, sum, cont)
 
 def prev():
-    global tempIndex
-    global tempHistory
-    if tempIndex > 0:
-        tempIndex -= 1
-        error, title, cat, sum, cont = chooser.getArticle(tempHistory[tempIndex])
-        if error:
-            update('Error', "The application couldn't connect to wikipedia.", "Please make sure that you are connected to the internet and try restarting the program.", "Please make sure that you are connected to the internet and try restarting the program.")
-            return
+    global historyInd
+    global historyArticle
+    global link, title, cat, sum, cont
+    if historyInd > 0:
+        historyInd -= 1
+        link, title, cat, sum, cont = splitList(historyArticle[historyInd])
         concatCategory=''
         for c in cat:
             concatCategory += c + ' - '

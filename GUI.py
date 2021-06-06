@@ -1,54 +1,74 @@
 import tkinter as tk
 from tkinter import *
-from PIL import Image, ImageTk
+from PIL import Image
+from PIL import ImageTk
 
 
 
 class mainPage:
     def __init__(self, root):
 
-        #background
-        self.root = root
-        self.frame = tk.Frame(root, width=1600, height=900, background='white')
-        self.frame.pack()
+        def background():
+            self.root = root
+            self.frame = tk.Frame(root, width=1600, height=900, background='white')
+            self.frame.pack()
         
-        #title
-        self.title = tk.Label(self.frame, font=('Raleway', 24), text='Loading Title...',background='white', anchor=SW, wraplength=1100, justify=LEFT)
-        self.title.place( x=10, y=10, height=80, relwidth=.75)
-        self.underline = tk.Canvas(self.frame, height=5, background='black')
-        self.underline.place( x=10, y=90, height=5, relwidth=.75)
+        def title():
+            self.title = tk.Label(self.frame, font=('Raleway', 24), text='Loading Title...',
+                                background='white', anchor=SW, wraplength=1100, justify=LEFT)
+            self.title.place( x=10, y=10, height=80, relwidth=.75)
+            self.underline = tk.Canvas(self.frame, height=5, background='black')
+            self.underline.place( x=10, y=90, height=5, relwidth=.75)
         
-        #content
-        self.category = tk.Label(self.frame, font=('Raleway', 14), text='Loading Categories...', background='white', anchor=NW, wraplength=1100, justify=LEFT)
-        self.category.place(x=10, y=95, height=25, relwidth=1.0, width=-20)
-        self.content = tk.Label(self.frame, font=('Raleway', 14), text='Loading Content...', background='white', anchor=NW, wraplength=1100, justify=LEFT)
-        self.content.place(x=10, y=120, relheight=.9, height=-145, relwidth=1.0, width=-20)
-        
-        #next
-        self.nextButton = tk.Button(self.frame, font=('Raleway', 14), text='Next',
-            border=0, background='lightblue')
-        self.nextButton.place(relx=.8, x=-10, rely=.9, y=-10, relwidth=.2, relheight=.1)
-        
-        #learn more
-        self.learnButton = tk.Button(self.frame, font=('Raleway', 14), text='Learn More',
-            border=0, background='lightblue')
-        self.learnButton.place(relx=.2, x=20, rely=.9, y=-10, relwidth=.6, width=-40, relheight=.1)
-        
-        #previous
-        self.prevButton = tk.Button(self.frame, font=('Raleway', 14), text='Previous',
-            border=0, background='lightblue')
-        self.prevButton.place(relx=0.0, x=10, rely=.9, y=-10, relwidth=.2, relheight=.1)
-        
-        #help
-        self.helpButton = tk.Button(self.frame, font=('Raleway', 14), text='Help',
-            border=0, background='lightblue')
-        self.helpButton.place(relx=0.75, x=20, y=10, relwidth=.25, width=-30, relheight=.1)
+        def image():
+            self.image = tk.Label(self.frame)
+            self.image.place(relx=0.75, x=20, rely=.2, y=30, relwidth=.25, width=-30, height=370)
 
-        #history
-        self.historyButton = tk.Button(self.frame, font=('Raleway', 14), text='History',
-            border=0, background='lightblue')
-        self.historyButton.place(relx=0.75, x=20, rely=.1, y=20, relwidth=.25, width=-30, relheight=.1)
+        def content():
+            self.category = tk.Label(self.frame, font=('Raleway', 14), text='Loading Categories...', 
+                                background='white', anchor=NW, wraplength=1100, justify=LEFT)
+            self.category.place(x=10, y=95, height=25, relwidth=.75)
+            self.content = tk.Label(self.frame, font=('Raleway', 14), text='Loading Content...', 
+                                background='white', anchor=NW, wraplength=1100, justify=LEFT)
+            self.content.place(x=10, y=120, relheight=.9, height=-145, relwidth=.75)
+        
+        def next():
+            self.nextButton = tk.Button(self.frame, font=('Raleway', 14), text='Next',
+                border=0, background='lightblue')
+            self.nextButton.place(relx=.8, x=-10, rely=.9, y=-10, relwidth=.2, relheight=.1)
+        
+        def learnMore():
+            self.learnButton = tk.Button(self.frame, font=('Raleway', 14), text='Learn More',
+                border=0, background='lightblue')
+            self.learnButton.place(relx=.2, x=20, rely=.9, y=-10, relwidth=.6, width=-40, relheight=.1)
+        
+        def previous():
+            self.prevButton = tk.Button(self.frame, font=('Raleway', 14), text='Previous',
+                border=0, background='lightblue')
+            self.prevButton.place(relx=0.0, x=10, rely=.9, y=-10, relwidth=.2, relheight=.1)
+        
+        def help():
+            self.helpButton = tk.Button(self.frame, font=('Raleway', 14), text='Help',
+                border=0, background='lightblue')
+            self.helpButton.place(relx=0.75, x=20, y=10, relwidth=.25, width=-30, relheight=.1)
 
+        def history():
+            self.historyButton = tk.Button(self.frame, font=('Raleway', 14), text='History',
+                border=0, background='lightblue')
+            self.historyButton.place(relx=0.75, x=20, rely=.1, y=20, relwidth=.25, width=-30, relheight=.1)
+        
+        background()
+        title()
+        image()
+        content()
+        next()
+        learnMore()
+        previous()
+        help()
+        history()
+
+
+    
 
     def setTitle(self, text):
         self.title.config(text=text)
@@ -65,6 +85,12 @@ class mainPage:
         self.prevButton.config(command=prev)
         self.helpButton.config(command=showhelp)
         self.historyButton.config(command=showHistory)
+
+    def setImage(self, src):
+        self.img = Image.open(f'{src}')
+        self.img = self.img.resize((370, 370), Image.ANTIALIAS)
+        self.img = ImageTk.PhotoImage(self.img)
+        self.image.configure(image=self.img)
 
     def hide(self):
         self.frame.pack_forget()
@@ -252,13 +278,13 @@ class historyPage:
 
     def updateHistory(self, title, link, open, delete, index):
         self.history.configure(state="normal")
-        a = tk.Button(self.frame, font=('Raleway', 16), text='Delete', background='red', borderwidth=0)
-        a.config(command=lambda: delete(index))
-        b = tk.Button(self.frame, font=('Raleway', 16), text=title, background='white', borderwidth=0)
-        b.config(command=lambda: open(link))
+        delButton = tk.Button(self.frame, font=('Raleway', 16), text='Delete', background='red', borderwidth=0)
+        delButton.config(command=lambda: delete(index))
+        linkButton = tk.Button(self.frame, font=('Raleway', 16), text=title, background='white', borderwidth=0)
+        linkButton.config(command=lambda: open(link))
         self.history.insert(0.0, "\n")
-        self.history.window_create(0.0, window=a)
-        self.history.window_create(0.0, window=b)
+        self.history.window_create(0.0, window=delButton)
+        self.history.window_create(0.0, window=linkButton)
         self.history.configure(state="disabled")
 
     def setButton(self, showmain):
